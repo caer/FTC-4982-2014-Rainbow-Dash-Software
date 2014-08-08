@@ -6,8 +6,8 @@
 #pragma config(Motor, mtr_S1_C1_2, FL, tmotorTetrix, openLoop)
 #pragma config(Motor, mtr_S2_C1_1, BR, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor, mtr_S2_C1_2, BL, tmotorTetrix, openLoop)
-#pragma config(Motor, mtr_S3_C1_1, BOOMR, tmotorTetrix, openLoop)
-#pragma config(Motor, mtr_S3_C1_2, BOOML, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor, mtr_S3_C1_1, LIFTR, tmotorTetrix, openLoop)
+#pragma config(Motor, mtr_S3_C1_2, LIFTL, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor, mtr_S4_C1_1, GUARDIANROLLER, tmotorTetrix, openLoop)
 #pragma config(Motor, mtr_S4_C1_2, FLAGRAISER, tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C2_1,    AB,                   tServoStandard)
@@ -19,7 +19,7 @@
 /*Pragmas must be declared before anything, including comments.***************/
 /*Any files including this one should have pragmas identical to these.********/
 
-//File: Guardian.h
+//File: guardian.h
 //Project: E-03-Rainbow Dash
 //Creation Date: Jan 21, 2014
 //
@@ -73,28 +73,6 @@ bool check(int direction)
 }
 #endif
 
-//Function: canRaise///////////////////////////////////////////////////////////
-//
-//
-//
-bool canRaise()
-{
-	//Is the limit switch hit?
-	//return SensorValue(TOUCHMUX) & MUX1;
-	return true;
-}
-
-//Function: canLower///////////////////////////////////////////////////////////
-//
-//
-//
-bool canLower()
-{
-	//Is the limit switch hit?
-	//return SensorValue(TOUCHMUX) & MUX2;
-  return true;
-}
-
 //Function: guardianListener///////////////////////////////////////////////////
 //
 //I wonder, what do you THINK it does? ;D
@@ -123,26 +101,30 @@ task guardianListener()
 			motor[GUARDIANROLLER] = 0;
 		}
 
-		//Boom/////////////////////////////////////////////////////////////////
+		//Lift/////////////////////////////////////////////////////////////////
 		//
-		//Manage up/down action on the boom.
+		//Manage up/down action on the lift.
 		//check(upJoystick.joy2_y2) && upJoystick.joy2_y2 < 0 && canLower()
-		if(check(upJoystick.joy2_y2) && upJoystick.joy2_y2 < 0 && canLower()) //Up.
+		
+		//Upwards.
+		if(check(upJoystick.joy2_y2) && upJoystick.joy2_y2 < 0 && canLower())
 		{
-			motor[BOOMR] = BOOM_SPEED_UP;
-			motor[BOOML] = BOOM_SPEED_UP;
+			motor[LIFTR] = LIFT_SPEED_UP;
+			motor[LIFTL] = LIFT_SPEED_UP;
 		}
 
-		else if(check(upJoystick.joy2_y2) && upJoystick.joy2_y2 > 0 && canRaise()) //Down.
+		//Downwards.
+		else if(check(upJoystick.joy2_y2) && upJoystick.joy2_y2 > 0 && canRaise())
 		{
-			motor[BOOMR] = BOOM_SPEED_DOWN;
-			motor[BOOML] = BOOM_SPEED_DOWN;
+			motor[LIFTR] = LIFT_SPEED_DOWN;
+			motor[LIFTL] = LIFT_SPEED_DOWN;
 		}
 
-		else //Stop.
+		//Stopped.
+		else
 		{
-			motor[BOOMR] = 0;
-			motor[BOOML] = 0;
+			motor[LIFTR] = 0;
+			motor[LIFTL] = 0;
 		}
 
 		//Flag raiser.

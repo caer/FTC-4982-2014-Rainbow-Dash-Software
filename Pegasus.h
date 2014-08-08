@@ -6,8 +6,8 @@
 #pragma config(Motor, mtr_S1_C1_2, FL, tmotorTetrix, openLoop)
 #pragma config(Motor, mtr_S2_C1_1, BR, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor, mtr_S2_C1_2, BL, tmotorTetrix, openLoop)
-#pragma config(Motor, mtr_S3_C1_1, BOOMR, tmotorTetrix, openLoop)
-#pragma config(Motor, mtr_S3_C1_2, BOOML, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor, mtr_S3_C1_1, LIFTR, tmotorTetrix, openLoop)
+#pragma config(Motor, mtr_S3_C1_2, LIFTL, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor, mtr_S4_C1_1, GUARDIANROLLER, tmotorTetrix, openLoop)
 #pragma config(Motor, mtr_S4_C1_2, FLAGRAISER, tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C2_1,    AB,                   tServoStandard)
@@ -19,7 +19,7 @@
 /*Pragmas must be declared before anything, including comments.***************/
 /*Any files including this one should have pragmas identical to these.********/
 
-//File: Pegasus.h
+//File: pegasus.h
 //Project: E-03-Rainbow Dash
 //Creation Date: Jan 21, 2014
 //
@@ -70,6 +70,13 @@ float getMagnitude(float x, float y);
 
 float getDirectionDegrees(float x, float y);
 
+//Function: setMotor///////////////////////////////////////////////////////////
+//
+//[setMotor] sets the passed motor to the passed value.  It was originally
+//           created so that other operations could be performed on motors 
+//           before they were set, like ramping, but remained unused as the 
+//           season progressed.
+//
 void setMotor(tMotor newMotor, float speed, int motorIndex)
 {
 	if (speed == 0)
@@ -157,12 +164,13 @@ void holonomicDrive(float magnitude, float direction, float rotation)
 		float bl = cosD * magnitude + rotation;
 		float br = sinD * magnitude - rotation; //sinD * magnitude - rotation;
 
+		//Set motors.
 		setMotor(FR, fr, 1);
 		setMotor(FL, fl, 2);
 		setMotor(BR, br, 3);
 		setMotor(BL, bl, 4);
 
-		//Convert to proper decimal place.
+		//Convert to proper decimal place.  TODO: Pointless now...
 		fl = fl * 100;
 		fr = fr * 100;
 		bl = bl * 100;
@@ -204,6 +212,7 @@ task pegasusListener()
 		if (!check(zRaw))
 			zRaw = 0;
 
+		//Scale back joystick values.
 		if (xRaw > 100)
 			xRaw = 100;
 		if (yRaw > 100)
