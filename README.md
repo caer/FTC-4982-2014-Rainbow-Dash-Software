@@ -1,4 +1,4 @@
-FTC-4982-2014-Rainbow-Dash-Software
+FTC #4982 2014 Rainbow Dash Software
 ===================================
 
 FIRST Tech Challenge Team #4982 Cafe Bot's software for their third and final robot of the 2014 Block Party season.
